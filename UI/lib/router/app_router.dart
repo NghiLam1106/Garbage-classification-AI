@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
-import 'package:garbageClassification/Screens/PlantIssuesScreen/PlantIssuesScreen.dart';
+import 'package:garbageClassification/Screens/GameScreen/QuizGameScreen.dart';
 import '../Screens/LoginScreen/loginScreen.dart';
 import '../Screens/HomeScreen/homeScreens.dart';
 import '../Screens/registerScreen/registerScreen.dart';
@@ -10,8 +10,8 @@ abstract final class AppRouter {
   static const String login = '/login';
   static const String register = '/register';
   static const String home = '/';
+  static const String quiz = '/quiz';
   static const String msg = '/msg';
-  static const String plIs = '/PlIs';
   static const String myT = '/myT';
   static const String chat = '/chat';
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
@@ -22,8 +22,8 @@ abstract final class AppRouter {
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
-      case plIs:
-        return MaterialPageRoute(builder: (_) => PlantIssuesScreen());
+      case quiz:
+        return MaterialPageRoute(builder: (_) => QuizGameScreen());
       case myT:
         return MaterialPageRoute(builder: (_) => GameScreen());
       case chat:

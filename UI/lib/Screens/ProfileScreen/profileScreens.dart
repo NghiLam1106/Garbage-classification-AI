@@ -88,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Trang cá nhân'),
+        title: const Text('Trang cá nhân', style: TextStyle(color: Colors.white),),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -97,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'images/bg5.jpg',
+              'images/bg12.png',
               fit: BoxFit.cover,
               color: Colors.black.withOpacity(0.3),
               colorBlendMode: BlendMode.darken,

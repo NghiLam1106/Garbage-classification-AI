@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
 
-class MyPlantsScreen extends StatefulWidget {
+class GameScreen extends StatefulWidget {
   @override
-  _MyPlantsScreenState createState() => _MyPlantsScreenState();
+  _GameScreenState createState() => _GameScreenState();
 }
 
-class _MyPlantsScreenState extends State<MyPlantsScreen> {
+class _GameScreenState extends State<GameScreen> {
   final List<Map<String, String>> plants = [
     {
-      'name': 'Cây Hoài cute',
+      'name': 'game abc',
       'image': 'images/lacute.png',
-      'status': '10 điểm',
+      'quantity': '10 câu',
     },
     {
-      'name': 'Cây Hoài dth',
+      'name': 'game abc',
       'image': 'images/lacute.png',
-      'status': '10 điểm',
+      'quantity': '10 câu',
     },
     {
-      'name': 'Cây Hoài ngầu',
+      'name': 'game abc',
       'image': 'images/lacute.png',
-      'status': '10 điểm',
+      'quantity': '10 câu',
     },
     {
-      'name': 'Cây Hoài học giỏi',
+      'name': 'game abc',
       'image': 'images/lacute.png',
-      'status': '10 điểm',
+      'quantity': '10 câu',
     },
   ];
 
@@ -44,8 +44,17 @@ class _MyPlantsScreenState extends State<MyPlantsScreen> {
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('🌱 Cây của tôi'),
+        title: Text('Trò chơi'),
         backgroundColor: Colors.green.shade700,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              // Xử lý khi nhấn nút add
+              print('Add button pressed');
+            },
+          ),
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -54,7 +63,7 @@ class _MyPlantsScreenState extends State<MyPlantsScreen> {
               padding: const EdgeInsets.all(12.0),
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Tìm kiếm cây...',
+                  hintText: 'Tìm kiếm...',
                   prefixIcon: Icon(Icons.search),
                   filled: true,
                   fillColor: Colors.grey.shade100,
@@ -96,7 +105,7 @@ class _MyPlantsScreenState extends State<MyPlantsScreen> {
                         plant['name']!,
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text('Tình trạng: ${plant['status']}'),
+                      subtitle: Text('Số câu: ${plant['quantity']}'),
                     ),
                   );
                 },

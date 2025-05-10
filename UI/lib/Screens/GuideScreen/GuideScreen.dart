@@ -5,37 +5,34 @@ import 'GuideDetailScreen.dart';
 class GuideScreen extends StatelessWidget {
   final List<Map<String, String>> guides = [
     {
-      'title': '🌿 Chọn đất phù hợp',
-      'description':
-          'Đất tốt giúp cây phát triển khỏe mạnh và chống chịu bệnh.',
+      'title': '🗑️ Phân loại rác tại nguồn',
+      'description': 'Bước đầu tiên và quan trọng nhất trong xử lý rác thải.',
       'detail':
-          'Bạn nên chọn đất tơi xốp, thoát nước tốt. Có thể trộn đất với xơ dừa, trấu hoặc phân hữu cơ để tăng độ thoáng khí.',
+          'Phân chia rác thành các loại: rác hữu cơ (thức ăn thừa, lá cây), rác tái chế (giấy, nhựa, kim loại) và rác vô cơ (nilông, sành sứ). Sử dụng thùng rác màu sắc khác nhau để dễ phân biệt.',
     },
     {
-      'title': '💧 Tưới nước đúng cách',
-      'description':
-          'Không tưới quá nhiều hoặc quá ít sẽ ảnh hưởng đến rễ cây.',
+      'title': '♻️ Tái chế rác thải',
+      'description': 'Giảm thiểu lượng rác thải ra môi trường.',
       'detail':
-          'Hãy tưới vào buổi sáng sớm hoặc chiều mát. Kiểm tra đất bằng cách chạm tay để cảm nhận độ ẩm, nếu khô hãy tưới.',
+          'Các vật dụng như chai nhựa, giấy, lon kim loại có thể làm sạch và đem đến điểm thu gom tái chế. Sáng tạo đồ tái chế thành vật dụng hữu ích trong nhà.',
     },
     {
-      'title': '☀️ Đảm bảo đủ ánh sáng',
-      'description': 'Ánh sáng là nguồn sống cho cây qua quá trình quang hợp.',
+      'title': '🌱 Ủ rác hữu cơ làm phân',
+      'description': 'Biến rác thải thành tài nguyên cho cây trồng.',
       'detail':
-          'Đặt cây gần cửa sổ hoặc vị trí có nắng nhẹ. Tránh ánh nắng gay gắt giữa trưa để không làm cháy lá.',
+          'Thu gom rác hữu cơ vào thùng ủ, trộn với men vi sinh và để khoảng 2-3 tháng. Sản phẩm thu được là phân compost giàu dinh dưỡng cho cây trồng.',
     },
     {
-      'title': '🐛 Kiểm tra sâu bệnh',
-      'description':
-          'Phòng bệnh hơn chữa bệnh - kiểm tra định kỳ là quan trọng.',
+      'title': '⚡ Xử lý rác nguy hại',
+      'description': 'Cách ly các loại rác độc hại khỏi môi trường sống.',
       'detail':
-          'Quan sát mặt dưới lá, thân cây để phát hiện sớm sâu hại. Có thể dùng nước rửa nhẹ hoặc thuốc sinh học để xử lý.',
+          'Pin, bóng đèn hỏng, thiết bị điện tử cần được thu gom riêng và đưa đến điểm thu hồi chuyên dụng. Không vứt chung với rác thông thường.',
     },
     {
-      'title': '✂️ Cắt tỉa định kỳ',
-      'description': 'Giúp cây thông thoáng, phát triển tập trung hơn.',
+      'title': '🚯 Giảm thiểu rác thải nhựa',
+      'description': 'Phòng ngừa ô nhiễm từ nguồn.',
       'detail':
-          'Cắt bỏ lá vàng, lá hư để không làm lây lan bệnh. Dụng cụ nên được khử trùng trước và sau khi cắt.',
+          'Sử dụng túi vải, bình nước cá nhân, hộp đựng thức ăn bằng thủy tinh. Ưu tiên sản phẩm có bao bì tự phân hủy hoặc không dùng bao bì.',
     },
   ];
 
@@ -43,7 +40,7 @@ class GuideScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('📖 Hướng dẫn chăm sóc cây'),
+        title: Text('📚 Hướng dẫn phân loại rác'),
         backgroundColor: Colors.green.shade700,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -51,34 +48,62 @@ class GuideScreen extends StatelessWidget {
             Navigator.pushReplacementNamed(context, AppRouter.home);
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              // Xử lý khi nhấn nút thêm
+              print('Thêm hướng dẫn mới');
+            },
+          ),
+        ],
       ),
       body: ListView.builder(
         itemCount: guides.length,
         itemBuilder: (context, index) {
           final guide = guides[index];
-          return ListTile(
-            leading: Icon(Icons.eco, color: Colors.green),
-            title: Text(
-              guide['title']!,
-              style: TextStyle(fontWeight: FontWeight.bold),
+          return Card(
+            margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            child: ListTile(
+              leading: Icon(_getIconForCategory(index), color: Colors.green),
+              title: Text(
+                guide['title']!,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(guide['description']!),
+              trailing: Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => GuideDetailScreen(
+                      title: guide['title']!,
+                      detail: guide['detail']!,
+                    ),
+                  ),
+                );
+              },
             ),
-            subtitle: Text(guide['description']!),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder:
-                      (_) => GuideDetailScreen(
-                        title: guide['title']!,
-                        detail: guide['detail']!,
-                      ),
-                ),
-              );
-            },
           );
         },
       ),
     );
+  }
+
+  IconData _getIconForCategory(int index) {
+    switch (index) {
+      case 0:
+        return Icons.delete;
+      case 1:
+        return Icons.recycling;
+      case 2:
+        return Icons.eco;
+      case 3:
+        return Icons.warning;
+      case 4:
+        return Icons.info;
+      default:
+        return Icons.info;
+    }
   }
 }

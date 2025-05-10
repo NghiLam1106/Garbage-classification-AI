@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:garbageClassification/Screens/GameScreen/MyPlantsScreen.dart';
+import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
 import 'package:garbageClassification/Screens/PlantIssuesScreen/PlantIssuesScreen.dart';
 import '../Screens/LoginScreen/loginScreen.dart';
 import '../Screens/HomeScreen/homeScreens.dart';
@@ -25,7 +25,7 @@ abstract final class AppRouter {
       case plIs:
         return MaterialPageRoute(builder: (_) => PlantIssuesScreen());
       case myT:
-        return MaterialPageRoute(builder: (_) => MyPlantsScreen());
+        return MaterialPageRoute(builder: (_) => GameScreen());
       case chat:
         return MaterialPageRoute(builder: (_) => ChatScreen());
       default:

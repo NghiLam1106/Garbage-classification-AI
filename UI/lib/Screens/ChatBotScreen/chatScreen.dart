@@ -1,174 +1,177 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:garbageClassification/Screens/ChatBotScreen/ChatService.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 
 class ChatScreen extends StatefulWidget {
+  final String? id;
+
+  const ChatScreen({super.key, this.id});
+
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
-  final _messages = [];
-  final ScrollController _scrollController =
-      ScrollController(); // Controller để cuộn
+  final List<Map<String, String>> _messages = [];
+  final GeminiService _gemini = GeminiService();
 
-  final List<String> prompts = [
-    "🌿 Cây bị vàng lá, nguyên nhân là gì?",
-    "💧 Cây bị héo, làm sao khắc phục?",
-    "🚰 Cây thiếu nước, dấu hiệu nhận biết?",
-    "❄️ Cách chăm sóc cây trong mùa đông?",
-  ];
-
-  // Hàm gửi tin nhắn
-  Future<void> _sendMessage(String message) async {
-    /*if (message.trim().isEmpty) return;
+  void _sendMessage() async {
+    final input = _controller.text.trim();
+    if (input.isEmpty) return;
 
     setState(() {
-      _messages.add(ChatMessage(role: 'user', content: message));
+      _messages.add({"role": "user", "content": input});
+      _controller.clear();
     });
 
-    _controller.clear();
+    final reply = await _gemini.sendMessage(input);
 
-    try {
-      ChatResponseDTO response =
-          await ChatService.sendMessageToChatbot(message);
-
-      setState(() {
-        _messages
-            .add(ChatMessage(role: 'assistant', content: response.response));
-      });
-    } catch (e) {
-      setState(() {
-        _messages.add(ChatMessage(
-            role: 'assistant',
-            content: "Xin lỗi, hiện chatbot đang gặp sự cố 🛠️"));
-      });
-    }
-
-    // Cuộn xuống dưới sau khi có tin nhắn mới
-    _scrollToBottom();*/
+    setState(() {
+      _messages.add({"role": "ai", "content": reply});
+    });
   }
 
-  // Hàm cuộn xuống dưới khi có tin nhắn mới
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    }
-  }
-
-  Widget _buildMessage(messag) {
-    final bool isUser = true;
-
-    return Align(
-      alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment:
-              isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-          children: [
-            if (!isUser)
-              CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.green.shade200,
-                child: Icon(Icons.android, color: Colors.white),
-              ),
-            if (!isUser) SizedBox(width: 8),
-            Flexible(
-              child: Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: isUser ? Colors.green.shade200 : Colors.grey.shade300,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                    bottomLeft: isUser ? Radius.circular(16) : Radius.zero,
-                    bottomRight: isUser ? Radius.zero : Radius.circular(16),
-                  ),
-                ),
-                child: Text(
-                  //message.content,
-                  'asds',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-            ),
-            if (isUser) SizedBox(width: 8),
-          ],
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = MediaQuery.of(context).platformBrightness == Brightness.dark; // Thêm dòng này để xác định chế độ tối/sáng
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chat với Chuyên Gia Cây Trồng"),
-        backgroundColor: Colors.green,
+        title: const Text('AI Chat'),
+        backgroundColor: isDarkMode ? const Color(0xFF1E1E1E) : Colors.blueAccent,
+        titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        iconTheme: const IconThemeData(color: Colors.white),
+        centerTitle: true,
       ),
+      backgroundColor: isDarkMode ? const Color(0xFF121212) : Colors.white,
       body: Column(
         children: [
-          // Danh sách tin nhắn
+          const Divider(),
           Expanded(
             child: ListView.builder(
-              controller: _scrollController, // Đặt controller cho ListView
-              padding: EdgeInsets.symmetric(vertical: 8),
-              itemCount: 2,
-              itemBuilder: (context, index) => _buildMessage(_messages[index]),
-            ),
-          ),
+              padding: const EdgeInsets.all(8),
+              itemCount: _messages.length,
+              itemBuilder: (context, index) {
+                final message = _messages[index];
+                final isUser = message['role'] == 'user';
 
-          // Gợi ý prompt
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
-              children: prompts.map((prompt) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: ElevatedButton(
-                    onPressed: () => _sendMessage(prompt),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade600,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                final user = "trung";
+                final userName = 'Bạn';
+                final userAvatar = "";
+
+                return Align(
+                  alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                      children: [
+                        if (!isUser)
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundImage: (userAvatar != null && userAvatar.isNotEmpty)
+                                ? NetworkImage(userAvatar)
+                                : null,
+                            backgroundColor: isDarkMode ? Colors.grey[700] : Colors.grey,
+                            child: (userAvatar == null || userAvatar.isEmpty)
+                                ? const Icon(Icons.person, color: Colors.white, size: 18)
+                                : null,
+                          )
+                        else
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundImage: userAvatar != null ? NetworkImage(userAvatar) : null,
+                            backgroundColor: isDarkMode ? Colors.grey[700] : Colors.grey,
+                            child: userAvatar == null
+                                ? const Icon(Icons.person, color: Colors.white, size: 18)
+                                : null,
+                          ),
+                        const SizedBox(width: 6),
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: isUser
+                                  ? (isDarkMode ? Colors.blueGrey[700] : Colors.blue[100])
+                                  : (isDarkMode ? Colors.grey[800] : Colors.grey[200]),
+                              borderRadius: BorderRadius.only(
+                                topLeft: const Radius.circular(16),
+                                topRight: const Radius.circular(16),
+                                bottomLeft: Radius.circular(isUser ? 16 : 0),
+                                bottomRight: Radius.circular(isUser ? 0 : 16),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isUser ? userName : 'FinBot 🤖',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: isUser
+                                        ? (isDarkMode ? Colors.white : Colors.blueGrey)
+                                        : (isDarkMode ? Colors.white : Colors.deepPurple),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  message['content'] ?? '',
+                                  style: TextStyle(
+                                    color: isDarkMode ? Colors.white70 : Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Text(prompt, style: TextStyle(color: Colors.white)),
                   ),
                 );
-              }).toList(),
+              },
             ),
           ),
-
-          // Ô nhập + gửi
+          const Divider(),
           Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
             child: Row(
               children: [
                 Expanded(
                   child: TextField(
                     controller: _controller,
+                    style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
                     decoration: InputDecoration(
-                      hintText: 'Nhập câu hỏi của bạn...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      hintText: 'Nhập tin nhắn...',
+                      hintStyle: TextStyle(color: isDarkMode ? Colors.white70 : Colors.grey),
                       filled: true,
-                      fillColor: Colors.grey.shade100,
+                      fillColor: isDarkMode ? Colors.grey[800] : Colors.grey[200],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                     ),
-                    onSubmitted: _sendMessage,
+                    onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.green),
-                  onPressed: () => _sendMessage(_controller.text),
+                  icon: const Icon(Icons.send),
+                  color: Colors.blueAccent,
+                  onPressed: _sendMessage,
                 ),
               ],
             ),

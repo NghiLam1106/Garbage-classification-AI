@@ -23,7 +23,7 @@ abstract final class AppRouter {
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case quiz:
-        return MaterialPageRoute(builder: (_) => QuizGameScreen());
+        return MaterialPageRoute(builder: (_) => QuizScreen());
       case myT:
         return MaterialPageRoute(builder: (_) => GameScreen());
       case chat:

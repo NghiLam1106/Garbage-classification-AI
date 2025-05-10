@@ -23,7 +23,10 @@ abstract final class AppRouter {
       case register:
         return MaterialPageRoute(builder: (_) => const RegisterScreen());
       case quiz:
-        return MaterialPageRoute(builder: (_) => QuizScreen());
+        final gameId = settings.arguments as String; // Lấy gameId từ arguments
+        return MaterialPageRoute(
+          builder: (_) => QuizScreen(gameId: gameId), // Truyền gameId vào QuizScreen
+        );
       case myT:
         return MaterialPageRoute(builder: (_) => GameScreen());
       case chat:

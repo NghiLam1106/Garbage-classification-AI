@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:garbageClassification/controllers/gameController.dart';
+import 'package:garbageClassification/mode/game_mode.dart';
 import 'package:garbageClassification/mode/quiz_mode.dart';
 import 'package:garbageClassification/router/app_router.dart';
 
@@ -12,30 +14,11 @@ class _GameScreenState extends State<GameScreen> {
   List<QuizModel> quizList = [];
   String searchQuery = '';
   bool isLoading = true;
+  final GameController gameController = GameController();
 
   @override
   void initState() {
     super.initState();
-    fetchQuizData();
-  }
-
-  Future<void> fetchQuizData() async {
-    try {
-      final snapshot =
-          await FirebaseFirestore.instance.collection('quizzes').get();
-      final quizzes =
-          snapshot.docs.map((doc) => QuizModel.fromSnapshot(doc)).toList();
-
-      setState(() {
-        quizList = quizzes;
-        isLoading = false;
-      });
-    } catch (e) {
-      debugPrint("Lỗi khi lấy quiz: $e");
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 
   void addSampleQuiz() async {
@@ -53,8 +36,6 @@ class _GameScreenState extends State<GameScreen> {
 
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text("Đã thêm quiz mẫu")));
-
-      fetchQuizData(); // Refresh list
     } catch (e) {
       debugPrint("Lỗi khi thêm quiz: $e");
     }
@@ -106,13 +87,28 @@ class _GameScreenState extends State<GameScreen> {
 
               Navigator.pop(context); // Đóng dialog thêm game
 
-              // Gọi dialog nhập câu hỏi đầu tiên
-              showAddQuizToGameDialog(context, newGameRef.id);
+              // Tiến hành thêm câu hỏi cho game
+              await addQuestionsToGame(context, newGameRef.id, quantity);
             },
           ),
         ],
       ),
     );
+  }
+
+  Future<void> addQuestionsToGame(
+      BuildContext context, String gameId, int quantity) async {
+    int questionsAdded = 0;
+
+    // Lặp lại cho đến khi đủ số câu hỏi
+    while (questionsAdded < quantity) {
+      showAddQuizToGameDialog(context, gameId);
+      questionsAdded++; // Tăng số câu hỏi đã thêm
+    }
+
+    // Sau khi thêm đủ số câu hỏi, thông báo hoặc thực hiện hành động khác
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text('Đã thêm $quantity câu hỏi')));
   }
 
   void showAddQuizToGameDialog(BuildContext context, String gameId) {
@@ -194,10 +190,6 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredQuizzes = quizList.where((quiz) {
-      return quiz.question.toLowerCase().contains(searchQuery.toLowerCase());
-    }).toList();
-
     return Scaffold(
       appBar: AppBar(
         leading: BackButton(),
@@ -211,73 +203,96 @@ class _GameScreenState extends State<GameScreen> {
         ],
       ),
       body: SafeArea(
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Tìm kiếm...',
-                        prefixIcon: Icon(Icons.search),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide.none,
-                        ),
+        child: StreamBuilder<List<GameModel>>(
+          stream:
+              gameController.getGamesStream(), // Sử dụng stream từ Firestore
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return Center(
+                  child: Text('Lỗi khi tải dữ liệu: ${snapshot.error}'));
+            }
+
+            final gameList = snapshot.data ?? [];
+            final filteredGames = gameList.where((game) {
+              return game.title
+                  .toLowerCase()
+                  .contains(searchQuery.toLowerCase());
+            }).toList();
+
+            return Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Tìm kiếm...',
+                      prefixIcon: Icon(Icons.search),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          searchQuery = value;
-                        });
-                      },
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value;
+                      });
+                    },
                   ),
-                  Expanded(
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: filteredQuizzes.length,
-                      itemBuilder: (context, index) {
-                        final quiz = filteredQuizzes[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, AppRouter.quiz);
-                          },
-                          child: Card(
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 6),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            elevation: 4,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(16),
-                              leading: ClipRRect(
-                                borderRadius: BorderRadius.circular(16),
-                                child: Image.asset(
-                                  "images/game.png",
-                                  width: 65,
-                                  height: 65,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              title: Text(
-                                quiz.question,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              subtitle: Text(
-                                  'Chủ đề: ${quiz.category} | Mức độ: ${quiz.difficulty}'),
-                            ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemCount: filteredGames.length,
+                    itemBuilder: (context, index) {
+                      final game = filteredGames[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(
+                            context,
+                            AppRouter.quiz,
+                            arguments: game.id,
+                          );
+                        },
+                        child: Card(
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                        );
-                      },
-                    ),
+                          elevation: 4,
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(16),
+                            leading: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.asset(
+                                "images/game.png",
+                                width: 65,
+                                height: 65,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            title: Text(
+                              game.title,
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle:
+                                Text('Số câu hỏi: ${game.quantity}'),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

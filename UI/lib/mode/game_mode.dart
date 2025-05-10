@@ -3,13 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class GameModel {
   final String? id;
   final String title;
-  final int totalQuestions;
+  final int quantity;
   final Timestamp createdAt;
 
   GameModel({
     this.id,
     required this.title,
-    required this.totalQuestions,
+    required this.quantity,
     required this.createdAt,
   });
 
@@ -20,7 +20,7 @@ class GameModel {
     return GameModel(
       id: doc.id,
       title: data['title'] ?? '',
-      totalQuestions: data['totalQuestions'] ?? 0,
+      quantity: data['quantity'] ?? 0,
       createdAt: data['createdAt'] ?? Timestamp.now(),
     );
   }
@@ -29,7 +29,7 @@ class GameModel {
   Map<String, dynamic> toMap() {
     return {
       'title': title,
-      'totalQuestions': totalQuestions,
+      'quantity': quantity,
       'createdAt': createdAt,
     };
   }

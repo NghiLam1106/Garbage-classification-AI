@@ -27,24 +27,17 @@ class QuizController {
     }
   }
 
-  /// Lấy câu hỏi từ 1 game cụ thể
-  Future<void> fetchQuizzesByGameId(String gameId) async {
-    try {
-      final snapshot = await _firestore
-          .collection('games')
-          .doc(gameId)
-          .collection('quizzes')
-          .get();
-
-      _quizzes = snapshot.docs.map((doc) => QuizModel.fromSnapshot(doc)).toList();
-      _shuffleQuizzes();
-    } catch (e) {
-      debugPrint('Lỗi khi tải câu hỏi theo game: $e');
-      throw Exception('Không thể tải câu hỏi theo game');
-    }
+  /// Khởi tạo danh sách quiz từ bên ngoài (ví dụ: từ 1 game cụ thể)
+  void initializeQuestions(List<QuizModel> quizzes) {
+    _quizzes = quizzes;
+    _shuffleQuizzes();
+    _currentIndex = 0;
+    _score = 0;
+    _totalCorrect = 0;
+    _totalAttempts = 0;
   }
 
-  /// Thêm câu hỏi vào `quizzes` toàn cục
+  /// Thêm câu hỏi mới
   Future<void> addQuiz(QuizModel quiz) async {
     try {
       await _firestore.collection('quizzes').add(quiz.toMap());

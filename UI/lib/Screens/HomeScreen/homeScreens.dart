@@ -6,10 +6,12 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:garbageClassification/Screens/ChatBotScreen/chatScreen.dart';
 import 'package:garbageClassification/Screens/GuideScreen/GuideScreen.dart';
 import 'package:garbageClassification/Screens/HomeScreen/widget/buildBtn.dart';
-import 'package:garbageClassification/Screens/GameScreen/MyPlantsScreen.dart';
+import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
 import 'package:garbageClassification/Screens/PlantIssuesScreen/PlantIssuesScreen.dart';
+import 'package:garbageClassification/Screens/ProfileScreen/profileScreens.dart';
 import 'package:garbageClassification/router/app_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -115,47 +117,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Widget body;
 
-    if (_currentIndex == 3) {
-      body = GuideScreen();
+   if (_currentIndex == 3) {
+      body = const ProfileScreen();
     } else if (_currentIndex == 2) {
       body = GuideScreen();
     } else if (_currentIndex == 1) {
-      body = MyPlantsScreen();
+      body = GameScreen();
     } else {
       body = Stack(
         children: [
           Positioned.fill(
             child: Image.asset('images/bg9.png', fit: BoxFit.cover),
-          ),
-          Positioned(
-            top: 40,
-            right: 20,
-            child: GestureDetector(
-              onTap: () {
-                if (isChatIcon) {
-                  handleMessage();
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.9),
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 4,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Icon(
-                  isChatIcon ? Icons.message : Icons.attach_money,
-                  color: Colors.green,
-                  size: 28,
-                ),
-              ),
-            ),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -163,23 +135,19 @@ class _HomeScreenState extends State<HomeScreen> {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 30),
                 child: Text(
-                  'Xác định một căn bệnh trong 1 cú nhấp chuột',
+                  'Phân rác đúng cách – Bé nhỏ làm điều to!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              buildButton('Quét cây trồng', _pickImage),
+              buildButton('Quét rác thải', _pickImage),
               const SizedBox(height: 10),
-              buildButton('Những vấn đề chung', () {
-                Navigator.pushReplacementNamed(context, AppRouter.plIs);
-              }),
-              const SizedBox(height: 10),
-              buildButton('Hỏi đáp về cây trồng 💬', () {
+              buildButton('Hỏi đáp về cách phân loại 💬', () {
                 Navigator.pushNamed(context, AppRouter.chat);
               }),
               const SizedBox(height: 20),
@@ -215,10 +183,10 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Tìm cây'),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Trang chủ'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_florist),
-            label: 'Cây của tôi',
+            icon: Icon(Icons.games),
+            label: 'Trò chơi',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Hướng dẫn'),
           BottomNavigationBarItem(

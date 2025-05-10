@@ -9,9 +9,8 @@ import os
 app = Flask(__name__)
 
 # Load model một lần duy nhất
-model = tf.keras.models.load_model(
-    r"E:\HOC_TAP\Nam_3\HOC_KY_2\Do_an_chuyen_nganh_1\source_code_hoc_may\soucre_code_chinh\Backend\model\garbage-classification.keras"
-)
+model = tf.keras.models.load_model("model/garbage-classification.keras")
+
 
 # Danh sách lớp rác
 class_names = [
@@ -21,16 +20,16 @@ class_names = [
 
 # Giải thích chi tiết
 explanations = {
-    0: "Ảnh cho thấy đây là **pin** thuộc nhóm **Rác thải điện tử**.",
-    1: "Ảnh cho thấy đây là **thực phẩm thừa, vỏ trái cây, rau củ** thuộc nhóm **Rác thải hữu cơ**.",
-    2: "Ảnh cho thấy đây là **bìa cứng** thuộc nhóm **Rác thải tái chế**.",
-    3: "Ảnh cho thấy đây là **vải** thuộc nhóm **Rác thải công nghiệp**.",
-    4: "Ảnh cho thấy đây là **thủy tinh** thuộc nhóm **Rác thải tái chế**.",
-    5: "Ảnh cho thấy đây là **vật dụng kim loại** thuộc nhóm **Rác thải tái chế hoặc công nghiệp**.",
-    6: "Ảnh cho thấy đây là **giấy** thuộc nhóm **Rác thải tái chế**.",
-    7: "Ảnh cho thấy đây là **nhựa** thuộc nhóm **Rác thải tái chế hoặc sinh hoạt**.",
-    8: "Ảnh cho thấy đây là **giày** thuộc nhóm **Rác thải tái chế hoặc sinh hoạt**.",
-    9: "Ảnh cho thấy đây là **rác thải hỗn hợp** thuộc nhóm **Rác thải sinh hoạt**.",
+    0: "Ảnh cho thấy đây là <b>pin</b> thuộc nhóm <b>Rác thải điện tử</b>.",
+    1: "Ảnh cho thấy đây là <b>thực phẩm thừa, vỏ trái cây, rau củ</b> thuộc nhóm <b>Rác thải hữu cơ</b>.",
+    2: "Ảnh cho thấy đây là <b>bìa cứng</b> thuộc nhóm <b>Rác thải tái chế</b>.",
+    3: "Ảnh cho thấy đây là <b>vải</b> thuộc nhóm <b>Rác thải công nghiệp</b>.",
+    4: "Ảnh cho thấy đây là <b>thủy tinh</b> thuộc nhóm <b>Rác thải tái chế</b>.",
+    5: "Ảnh cho thấy đây là <b>vật dụng kim loại</b> thuộc nhóm <b>Rác thải tái chế hoặc công nghiệp</b>.",
+    6: "Ảnh cho thấy đây là <b>giấy</b> thuộc nhóm <b>Rác thải tái chế</b>.",
+    7: "Ảnh cho thấy đây là <b>nhựa</b> thuộc nhóm <b>Rác thải tái chế hoặc sinh hoạt</b>.",
+    8: "Ảnh cho thấy đây là <b>giày</b> thuộc nhóm <b>Rác thải tái chế hoặc sinh hoạt</b>.",
+    9: "Ảnh cho thấy đây là <b>rác thải hỗn hợp</b> thuộc nhóm <b>Rác thải sinh hoạt</b>.",
 }
 
 # Hướng dẫn xử lý

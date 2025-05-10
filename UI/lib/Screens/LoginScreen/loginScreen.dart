@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garbageClassification/auth/auth.dart';
 import 'package:garbageClassification/common/constants/appSizes.dart';
 import 'package:garbageClassification/common/util/appValidation.dart';
 import 'package:garbageClassification/router/app_router.dart';
@@ -30,8 +31,8 @@ class LoginScreenState extends State<LoginScreen> {
       final String email = emailController.text.trim();
       final String password = passwordController.text.trim();
 
-     /* final authController = AuthController();
-      await authController.signIn(context, email, password);*/
+     final authController = AuthController();
+      await authController.signIn(context, email, password);
     }
   }
 

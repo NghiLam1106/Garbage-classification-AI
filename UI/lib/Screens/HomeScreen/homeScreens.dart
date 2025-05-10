@@ -1,15 +1,16 @@
 // ignore_for_file: unused_import, file_names, use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
 // ignore: unnecessary_import
 import 'dart:typed_data';
-import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/Screens/ChatBotScreen/chatScreen.dart';
+import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
 import 'package:garbageClassification/Screens/GuideScreen/GuideScreen.dart';
 import 'package:garbageClassification/Screens/HomeScreen/widget/buildBtn.dart';
-import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
 import 'package:garbageClassification/Screens/ProfileScreen/profileScreens.dart';
 import 'package:garbageClassification/router/app_router.dart';
 import 'package:http/http.dart' as http;
@@ -37,10 +38,11 @@ class _HomeScreenState extends State<HomeScreen> {
     if (pickedFile != null) {
       if (kIsWeb) {
         final bytes = await pickedFile.readAsBytes();
+        final fileName = pickedFile.name;
         setState(() {
           _imageBytes = bytes;
         });
-        await _analyzeImageWeb(bytes);
+        await _analyzeImageWeb(bytes, fileName);
       } else {
         setState(() {
           _imageFile = File(pickedFile.path);
@@ -55,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print("Mở tin nhắn...");
   }
 
- /* Future<void> _handlePayment() async {
+  /* Future<void> _handlePayment() async {
     final payUrl = await MomoService.createMomoPayment("1000");
 
     if (payUrl != null) {
@@ -78,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _analyzeImage(File imageFile) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://localhost:8000/api/predict/'),
+      Uri.parse('http://localhost:5000/predict'),
     );
 
     request.files.add(
@@ -89,25 +91,25 @@ class _HomeScreenState extends State<HomeScreen> {
     var jsonData = json.decode(responseData);
 
     setState(() {
-      _result = jsonData['disease'] ?? 'Không xác định';
+      _result = jsonData['predicted_class'] ?? 'Không xác định';
     });
   }
 
-  Future<void> _analyzeImageWeb(Uint8List imageBytes) async {
+  Future<void> _analyzeImageWeb(Uint8List imageBytes, fileName) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://localhost:8000/api/predict/'),
+      Uri.parse('http://localhost:5000/predict'),
     );
 
     request.files.add(
-      http.MultipartFile.fromBytes('file', imageBytes, filename: 'image.jpg'),
+      http.MultipartFile.fromBytes('file', imageBytes, filename: fileName),
     );
     var response = await request.send();
     var responseData = await response.stream.bytesToString();
     var jsonData = json.decode(responseData);
 
     setState(() {
-      _result = jsonData['disease'] ?? 'Không xác định';
+      _result = jsonData['predicted_class'] ?? 'Không xác định';
       isChatIcon = !isChatIcon;
     });
   }
@@ -116,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     Widget body;
 
-   if (_currentIndex == 3) {
+    if (_currentIndex == 3) {
       body = ProfileScreen();
     } else if (_currentIndex == 2) {
       body = GuideScreen();

@@ -5,11 +5,16 @@ from tensorflow.keras.applications.mobilenet_v3 import preprocess_input
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import tempfile
 import os
+from flask import Flask
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
+base_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(base_dir, "../model/garbage-classification.keras")
 # Load model một lần duy nhất
-model = tf.keras.models.load_model("model/garbage-classification.keras")
+model = tf.keras.models.load_model(model_path)
 
 
 # Danh sách lớp rác

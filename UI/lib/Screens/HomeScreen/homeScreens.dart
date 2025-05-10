@@ -117,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Widget body;
 
    if (_currentIndex == 3) {
-      body = const ProfileScreen();
+      body = ProfileScreen();
     } else if (_currentIndex == 2) {
       body = GuideScreen();
     } else if (_currentIndex == 1) {

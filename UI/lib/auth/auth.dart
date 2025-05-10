@@ -32,8 +32,8 @@ class AuthController {
         name: name,
         email: email,
         avatar: '',
-        phoneNumber: '',
-        address: '',
+        // phoneNumber: '',
+        // address: '',
         role: 'user', // Mặc định là 'user'
       );
 
@@ -152,8 +152,8 @@ class AuthController {
           name: name,
           email: email,
           avatar: '',
-          phoneNumber: '',
-          address: '',
+          // phoneNumber: '',
+          // address: '',
           role: 'user', // Mặc định là 'user'
         );
 
@@ -165,12 +165,25 @@ class AuthController {
         // Hiển thị thông báo thành công
         // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Đăng nhập thành công!')),
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Row(
+              children: const [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 10),
+                Text('Đăng nhập thành công!',
+                    style: TextStyle(color: Colors.white)),
+              ],
+            ),
+          ),
         );
 
         // Chuyển hướng tới trang chủ (HomeScreen) bằng GoRouter
         // ignore: use_build_context_synchronously
-        // context.push('/');
+        Navigator.pushReplacementNamed(
+          context,
+          AppRouter.home,
+        );
       }
     } catch (e) {
       print("Lỗi khi đăng nhập Google: $e");
@@ -195,12 +208,25 @@ class AuthController {
       // Hiển thị thông báo
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Đăng xuất thành công!')),
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Row(
+              children: const [
+                Icon(Icons.check_circle, color: Colors.white),
+                SizedBox(width: 10),
+                Text('Đăng xuất thành công!',
+                    style: TextStyle(color: Colors.white)),
+              ],
+            ),
+          ),
         );
 
         // Chuyển hướng tới trang chủ (HomeScreen) bằng GoRouter
         // ignore: use_build_context_synchronously
-        // context.push('/');
+        Navigator.pushReplacementNamed(
+          context,
+          AppRouter.home,
+        );
       }
     } catch (e) {
       // ignore: use_build_context_synchronously

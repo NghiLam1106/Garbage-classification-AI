@@ -1,16 +1,29 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:garbageClassification/Screens/LoginScreen/loginScreen.dart';
+import 'package:garbageClassification/auth/auth.dart';
 import 'package:garbageClassification/router/app_router.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-  final bool isLoggedIn = false;
+  ProfileScreen({super.key});
   final bool isVip = false;
+  final User? user = FirebaseAuth.instance.currentUser;
 
-  Widget _buildUserProfile() {
-    const String avatarUrl = 'https://i.pravatar.cc/150?img=10';
-    const String userName = 'Lê Minh Hoàng';
-    const String userEmail = 'hoang@example.com';
+  Future<Map<String, dynamic>?> getUserData() async {
+    if (user == null) return null;
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get();
+    return doc.data();
+  }
+
+  Widget _buildUserProfile(
+      Map<String, dynamic> userData, BuildContext context) {
+    final String avatarUrl = userData['avatar'] ??
+        'https://res.cloudinary.com/dpjpqdp71/image/upload/v1744649065/IMG_20250319_160106_f9ds8j.jpg';
+    final String userName = userData['name'] ?? 'Không rõ tên';
+    final String userEmail = userData['email'] ?? 'Không rõ email';
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -70,7 +83,8 @@ class ProfileScreen extends StatelessWidget {
         const SizedBox(height: 24),
         ElevatedButton.icon(
           onPressed: () {
-            debugPrint("Đăng xuất");
+            final authController = AuthController();
+            authController.signOut(context);
           },
           icon: const Icon(Icons.logout),
           label: const Text("Đăng xuất"),
@@ -88,7 +102,8 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text('Trang cá nhân', style: TextStyle(color: Colors.white),),
+        title:
+            const Text('Trang cá nhân', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -104,27 +119,34 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           Center(
-            child:
-                isLoggedIn
-                    ? _buildUserProfile()
-                    : ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                          context,
-                          AppRouter.login,
-                        );
-                      },
-                      icon: const Icon(Icons.login),
-                      label: const Text("Đăng nhập"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 32,
-                          vertical: 12,
-                        ),
-                        textStyle: const TextStyle(fontSize: 18),
-                      ),
+            child: user == null
+                ? ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, AppRouter.login);
+                    },
+                    icon: const Icon(Icons.login),
+                    label: const Text("Đăng nhập"),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 12),
+                      textStyle: const TextStyle(fontSize: 18),
                     ),
+                  )
+                : FutureBuilder<Map<String, dynamic>?>(
+                    future: getUserData(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return const Text("Lỗi khi tải thông tin");
+                      } else if (!snapshot.hasData || snapshot.data == null) {
+                        return const Text(
+                            "Không tìm thấy thông tin người dùng");
+                      }
+                      return _buildUserProfile(snapshot.data!, context);
+                    },
+                  ),
           ),
         ],
       ),

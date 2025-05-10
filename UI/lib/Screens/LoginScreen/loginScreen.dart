@@ -185,8 +185,8 @@ class LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   ElevatedButton(
                     onPressed: () {
-                      /*final authController = AuthController();
-                      authController.signInWithGoogle(context);*/
+                      final authController = AuthController();
+                      authController.signInWithGoogle(context);
                     },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Màu nền

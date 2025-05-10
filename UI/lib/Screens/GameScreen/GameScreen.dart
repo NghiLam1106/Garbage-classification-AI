@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garbageClassification/router/app_router.dart';
 
 class GameScreen extends StatefulWidget {
   @override
@@ -6,25 +7,21 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> {
-  final List<Map<String, String>> plants = [
+  final List<Map<String, String>> quizs = [
     {
       'name': 'game abc',
-      'image': 'images/lacute.png',
       'quantity': '10 câu',
     },
     {
       'name': 'game abc',
-      'image': 'images/lacute.png',
       'quantity': '10 câu',
     },
     {
       'name': 'game abc',
-      'image': 'images/lacute.png',
       'quantity': '10 câu',
     },
     {
       'name': 'game abc',
-      'image': 'images/lacute.png',
       'quantity': '10 câu',
     },
   ];
@@ -33,8 +30,8 @@ class _GameScreenState extends State<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final filteredPlants = plants.where((plant) {
-      final name = plant['name']!.toLowerCase();
+    final filteredQuizs = quizs.where((quiz) {
+      final name = quiz['name']!.toLowerCase();
       return name.contains(searchQuery.toLowerCase());
     }).toList();
 
@@ -82,30 +79,38 @@ class _GameScreenState extends State<GameScreen> {
             Expanded(
               child: ListView.builder(
                 physics: BouncingScrollPhysics(),
-                itemCount: filteredPlants.length,
+                itemCount: filteredQuizs.length,
                 itemBuilder: (context, index) {
-                  final plant = filteredPlants[index];
-                  return Card(
-                    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16)),
-                    elevation: 4,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.all(16),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          plant['image']!,
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
+                  final quiz = filteredQuizs[index];
+                  return GestureDetector(
+                    onTap: (){
+                       Navigator.pushReplacementNamed(
+                              context,
+                              AppRouter.quiz,
+                      );
+                    },
+                    child: Card(
+                      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16)),
+                      elevation: 4,
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(16),
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset(
+                            "images/game.png",
+                            width: 65,
+                            height: 65,
+                            fit: BoxFit.cover,
+                          ),
                         ),
+                        title: Text(
+                          quiz['name']!,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text('Số câu: ${quiz['quantity']}'),
                       ),
-                      title: Text(
-                        plant['name']!,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Text('Số câu: ${plant['quantity']}'),
                     ),
                   );
                 },

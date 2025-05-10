@@ -10,7 +10,6 @@ import 'package:garbageClassification/Screens/ChatBotScreen/chatScreen.dart';
 import 'package:garbageClassification/Screens/GuideScreen/GuideScreen.dart';
 import 'package:garbageClassification/Screens/HomeScreen/widget/buildBtn.dart';
 import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
-import 'package:garbageClassification/Screens/PlantIssuesScreen/PlantIssuesScreen.dart';
 import 'package:garbageClassification/Screens/ProfileScreen/profileScreens.dart';
 import 'package:garbageClassification/router/app_router.dart';
 import 'package:http/http.dart' as http;
@@ -79,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _analyzeImage(File imageFile) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://localhost:8000/api/plant/'),
+      Uri.parse('http://localhost:8000/api/predict/'),
     );
 
     request.files.add(
@@ -97,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _analyzeImageWeb(Uint8List imageBytes) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://localhost:8000/api/plant/'),
+      Uri.parse('http://localhost:8000/api/predict/'),
     );
 
     request.files.add(
@@ -127,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body = Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('images/bg9.png', fit: BoxFit.cover),
+            child: Image.asset('images/bg13.png', fit: BoxFit.cover),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

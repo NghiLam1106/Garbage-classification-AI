@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/controllers/gameController.dart';
 import 'package:garbageClassification/controllers/quizController.dart';
-import 'package:garbageClassification/mode/quiz_mode.dart';
+import 'package:garbageClassification/model/quiz_model.dart';
 import 'package:garbageClassification/router/app_router.dart';
 
 class QuizScreen extends StatefulWidget {

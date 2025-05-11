@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:garbageClassification/controllers/gameController.dart';
-import 'package:garbageClassification/mode/game_mode.dart';
-import 'package:garbageClassification/mode/quiz_mode.dart';
+import 'package:garbageClassification/model/game_model.dart';
+import 'package:garbageClassification/model/quiz_model.dart';
 import 'package:garbageClassification/router/app_router.dart';
 
 class GameScreen extends StatefulWidget {

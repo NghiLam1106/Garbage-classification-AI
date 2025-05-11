@@ -11,8 +11,7 @@ abstract final class AppRouter {
   static const String register = '/register';
   static const String home = '/';
   static const String quiz = '/quiz';
-  static const String msg = '/msg';
-  static const String myT = '/myT';
+  static const String game = '/game';
   static const String chat = '/chat';
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -27,7 +26,7 @@ abstract final class AppRouter {
         return MaterialPageRoute(
           builder: (_) => QuizScreen(gameId: gameId), // Truyền gameId vào QuizScreen
         );
-      case myT:
+      case game:
         return MaterialPageRoute(builder: (_) => GameScreen());
       case chat:
         return MaterialPageRoute(builder: (_) => ChatScreen());

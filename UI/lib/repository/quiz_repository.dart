@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:garbageClassification/mode/quiz_mode.dart';
+import 'package:garbageClassification/model/quiz_model.dart';
 
 class QuizRepository {
   final CollectionReference _quizzesCollection =

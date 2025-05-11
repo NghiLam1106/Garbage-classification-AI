@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 # Load model một lần duy nhất
-model = tf.keras.models.load_model("model/garbage-classification.keras")
+model = tf.keras.models.load_model("../model/garbage-classification.keras")
 
 
 # Danh sách lớp rác

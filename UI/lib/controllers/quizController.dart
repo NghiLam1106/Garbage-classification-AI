@@ -19,7 +19,8 @@ class QuizController {
       }
 
       final snapshot = await query.get();
-      _quizzes = snapshot.docs.map((doc) => QuizModel.fromSnapshot(doc)).toList();
+      _quizzes =
+          snapshot.docs.map((doc) => QuizModel.fromSnapshot(doc)).toList();
       _shuffleQuizzes();
     } catch (e) {
       debugPrint('Lỗi khi lấy câu hỏi: $e');
@@ -48,7 +49,8 @@ class QuizController {
   }
 
   /// Thêm câu hỏi vào 1 game cụ thể
-  Future<void> addQuizToGame({required String gameId, required QuizModel quiz}) async {
+  Future<void> addQuizToGame(
+      {required String gameId, required QuizModel quiz}) async {
     try {
       await _firestore
           .collection('games')
@@ -105,9 +107,8 @@ class QuizController {
 
   // Thống kê
   int get score => _score;
-  int get totalQuestions => _quizzes.length;
+  int get quantity => _quizzes.length;
   int get currentQuestionNumber => _currentIndex + 1;
-  double get accuracyRate => _totalAttempts > 0
-      ? (_totalCorrect / _totalAttempts) * 100
-      : 0;
+  double get accuracyRate =>
+      _totalAttempts > 0 ? (_totalCorrect / _totalAttempts) * 100 : 0;
 }

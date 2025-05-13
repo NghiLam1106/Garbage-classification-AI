@@ -71,7 +71,7 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Câu ${_controller.currentQuestionNumber}/${_controller.totalQuestions}',
+          'Câu ${_controller.currentQuestionNumber}/${_controller.quantity}',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: Colors.green.shade700,
@@ -112,7 +112,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
               ),
               SizedBox(height: 24),
-              
+
               // Đáp án
               Expanded(
                 child: ListView.builder(
@@ -120,14 +120,14 @@ class _QuizScreenState extends State<QuizScreen> {
                   itemCount: currentQuiz.answers.length,
                   itemBuilder: (context, index) {
                     final answer = currentQuiz.answers[index];
-                    final isCorrect = _isAnswered && 
-                        index == currentQuiz.correctAnswerIndex;
+                    final isCorrect =
+                        _isAnswered && index == currentQuiz.correctAnswerIndex;
                     final isSelected = _selectedAnswerIndex == index;
-                    
+
                     Color? cardColor;
                     if (_isAnswered) {
-                      cardColor = isCorrect 
-                          ? Colors.green.shade100 
+                      cardColor = isCorrect
+                          ? Colors.green.shade100
                           : (isSelected ? Colors.red.shade100 : null);
                     }
 
@@ -139,8 +139,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(
-                            color: isSelected 
-                                ? Colors.green.shade700 
+                            color: isSelected
+                                ? Colors.green.shade700
                                 : Colors.grey.shade300,
                             width: isSelected ? 2 : 1,
                           ),
@@ -154,12 +154,11 @@ class _QuizScreenState extends State<QuizScreen> {
                               children: [
                                 if (_isAnswered)
                                   Icon(
-                                    isCorrect 
-                                        ? Icons.check_circle 
+                                    isCorrect
+                                        ? Icons.check_circle
                                         : Icons.cancel,
-                                    color: isCorrect 
-                                        ? Colors.green 
-                                        : Colors.red,
+                                    color:
+                                        isCorrect ? Colors.green : Colors.red,
                                   ),
                                 SizedBox(width: 12),
                                 Expanded(
@@ -168,14 +167,14 @@ class _QuizScreenState extends State<QuizScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       color: _isAnswered
-                                          ? (isCorrect 
-                                              ? Colors.green.shade900 
-                                              : (isSelected 
-                                                  ? Colors.red.shade900 
+                                          ? (isCorrect
+                                              ? Colors.green.shade900
+                                              : (isSelected
+                                                  ? Colors.red.shade900
                                                   : Colors.black))
                                           : Colors.black,
-                                      fontWeight: isSelected 
-                                          ? FontWeight.bold 
+                                      fontWeight: isSelected
+                                          ? FontWeight.bold
                                           : FontWeight.normal,
                                     ),
                                   ),
@@ -227,14 +226,15 @@ class _QuizScreenState extends State<QuizScreen> {
                     onPressed: _handleNextQuestion,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green.shade700,
-                      padding: EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 16, horizontal: 32),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
                       elevation: 4,
                     ),
                     child: Text(
-                      _controller.currentQuestionNumber < _controller.totalQuestions
+                      _controller.currentQuestionNumber < _controller.quantity
                           ? 'TIẾP THEO'
                           : 'XEM KẾT QUẢ',
                       style: TextStyle(
@@ -258,7 +258,7 @@ class _QuizScreenState extends State<QuizScreen> {
         _selectedAnswerIndex = index;
         _isAnswered = true;
         final isCorrect = _controller.checkAnswer(index);
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -308,7 +308,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   width: 150,
                   height: 150,
                   child: CircularProgressIndicator(
-                    value: _controller.score / _controller.totalQuestions,
+                    value: _controller.score / _controller.quantity,
                     strokeWidth: 10,
                     color: Colors.green,
                     backgroundColor: Colors.grey.shade200,
@@ -317,7 +317,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 Column(
                   children: [
                     Text(
-                      '${_controller.score}/${_controller.totalQuestions}',
+                      '${_controller.score}/${_controller.quantity}',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -371,7 +371,8 @@ class _QuizScreenState extends State<QuizScreen> {
                 ),
                 child: Text(
                   'TRANG CHỦ',
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
             ],
@@ -385,7 +386,7 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   String _getResultMessage() {
-    final percentage = (_controller.score / _controller.totalQuestions) * 100;
+    final percentage = (_controller.score / _controller.quantity) * 100;
     if (percentage >= 90) return 'Xuất sắc! Bạn thực sự hiểu biết!';
     if (percentage >= 70) return 'Tốt lắm! Kiến thức của bạn rất ấn tượng!';
     if (percentage >= 50) return 'Khá đấy! Hãy ôn lại một chút nhé!';

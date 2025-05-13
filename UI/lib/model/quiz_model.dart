@@ -4,7 +4,7 @@ class QuizModel {
   final String? id;
   final String question;
   final List<String> answers;
-  final int correctAnswerIndex;
+  int correctAnswerIndex;
   final String explanation;
   final String category;
   final Timestamp? timestamp;

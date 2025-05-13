@@ -112,7 +112,7 @@ class ProfileScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.asset(
-              'images/bg12.png',
+              'assets/bg12.png',
               fit: BoxFit.cover,
               color: Colors.black.withOpacity(0.3),
               colorBlendMode: BlendMode.darken,

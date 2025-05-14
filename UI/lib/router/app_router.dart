@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
 import 'package:garbageClassification/Screens/GameScreen/QuizGameScreen.dart';
-import 'package:garbageClassification/Screens/admin/games/games.dart';
+import 'package:garbageClassification/Screens/admin/games/dashboard.dart';
 import 'package:garbageClassification/Screens/admin/games/update_game.dart';
 import '../Screens/LoginScreen/loginScreen.dart';
 import '../Screens/HomeScreen/homeScreens.dart';

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/Screens/admin/games/widgets/game_listview.dart';
+import 'package:garbageClassification/Screens/admin/games/widgets/grid_dashboard.dart';
 import 'package:garbageClassification/common/util/game_dialogs.dart';
 import 'package:garbageClassification/controllers/gameController.dart';
 
@@ -71,7 +72,22 @@ class _AdminGameScreenState extends State<AdminGameScreen> {
 
           List<DocumentSnapshot> gamesList = snapshot.data!.docs;
 
-          return ListviewGame(gamesList: gamesList);
+          return ListView(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(8),
+            children: [
+              GridDashboard(
+                brandQuantity: gamesList.length,
+                categoriesQuantity: gamesList.length,
+                orderQuantity: gamesList.length,
+                productQuantity: gamesList.length,
+              ),
+              const SizedBox(height: 20),
+
+              ListviewGame(gamesList: gamesList),
+            ],
+          );
         },
       ),
       floatingActionButton: FloatingActionButton(

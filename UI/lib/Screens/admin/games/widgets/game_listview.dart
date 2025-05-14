@@ -17,6 +17,8 @@ class ListviewGame extends StatelessWidget {
   Widget build(BuildContext context) {
     final GameController gameController = GameController();
     return ListView.builder(
+        shrinkWrap: true, // ✅ giới hạn chiều cao
+        physics: NeverScrollableScrollPhysics(),
         itemCount: gamesList.length,
         itemBuilder: (context, index) {
           DocumentSnapshot doc = gamesList[index];

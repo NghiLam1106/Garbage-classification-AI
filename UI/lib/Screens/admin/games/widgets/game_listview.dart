@@ -29,7 +29,7 @@ class ListviewGame extends StatelessWidget {
               onDelete: () => showDeleteConfirmationDialog(
                     context: context,
                     onConfirm: () {
-                      gameController.removeGames(doc.id);
+                      gameController.removeGameAndQuizzes(doc.id);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Xóa thành công')),
                       );

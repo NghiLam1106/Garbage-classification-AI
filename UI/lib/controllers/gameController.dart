@@ -86,7 +86,40 @@ class GameController {
     }
   }
 
-  Future<void> removeGames(String id) async {
-    game.doc(id).delete();
+Future<void> removeGameAndQuizzes(String id) async {
+  final gameRef = FirebaseFirestore.instance.collection('games').doc(id);
+  final quizzesRef = gameRef.collection('quizzes');
+
+  final quizSnapshots = await quizzesRef.get();
+  for (final doc in quizSnapshots.docs) {
+    await doc.reference.delete();
   }
+
+  await gameRef.delete();
+}
+
+
+  Future<void> updateGame(String gameId, String title, int quantity) async {
+  await FirebaseFirestore.instance.collection('games').doc(gameId).update({
+    'title': title,
+    'quantity': quantity,
+  });
+}
+
+Future<void> updateQuiz(String gameId, List<QuizModel> quizzes) async {
+  final quizCollection = FirebaseFirestore.instance
+      .collection('games')
+      .doc(gameId)
+      .collection('quizzes');
+
+  for (var quiz in quizzes) {
+    await quizCollection.doc(quiz.id).update({
+      'question': quiz.question,
+      'answers': quiz.answers,
+      'correctAnswerIndex': quiz.correctAnswerIndex,
+      'explanation': quiz.explanation,
+    });
+  }
+}
+
 }

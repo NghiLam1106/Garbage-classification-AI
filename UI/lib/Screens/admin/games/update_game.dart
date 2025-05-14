@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/controllers/gameController.dart';
 import 'package:garbageClassification/model/quiz_model.dart';
+import 'package:garbageClassification/router/app_router.dart';
 import 'package:garbageClassification/widgets/appbar.dart';
 
 class UpdateGameScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class _UpdateGameScreenState extends State<UpdateGameScreen> {
   late TextEditingController _quantityController;
 
   List<QuizModel> _quizzes = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -30,13 +32,23 @@ class _UpdateGameScreenState extends State<UpdateGameScreen> {
   Future<void> _loadData() async {
     final quizzesList = await gameController.fetchQuizzesForGame(widget.id);
     final gameData = await gameController.fetchGame(widget.id);
-    _quizzes = quizzesList;
-    _titleController = TextEditingController(text: gameData.title);
-    _quantityController = TextEditingController(text: gameData.quantity.toString());
+    setState(() {
+      _quizzes = quizzesList;
+      _titleController = TextEditingController(text: gameData.title);
+      _quantityController =
+          TextEditingController(text: gameData.quantity.toString());
+      _isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Scaffold(
+        appBar: AppbarCustom(title: Text('Cập nhật trò chơi')),
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       appBar: AppbarCustom(title: Text('Cập nhật trò chơi')),
       body: Padding(
@@ -53,7 +65,8 @@ class _UpdateGameScreenState extends State<UpdateGameScreen> {
               decoration: InputDecoration(labelText: "Số lượng câu hỏi"),
             ),
             const SizedBox(height: 20),
-            Text("Danh sách câu hỏi", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("Danh sách câu hỏi",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ..._quizzes.asMap().entries.map((entry) {
               int index = entry.key;
               QuizModel quiz = entry.value;
@@ -81,10 +94,22 @@ class _UpdateGameScreenState extends State<UpdateGameScreen> {
             }).toList(),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Gửi dữ liệu cập nhật lên server hoặc local
+              onPressed: () async {
                 String newTitle = _titleController.text;
                 int newQuantity = int.tryParse(_quantityController.text) ?? 0;
+
+                await gameController.updateGame(
+                    widget.id, newTitle, newQuantity);
+                await gameController.updateQuiz(widget.id, _quizzes);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Cập nhật thành công')),
+                );
+
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRouter.admin,
+                );
               },
               child: Text("Lưu cập nhật"),
             )

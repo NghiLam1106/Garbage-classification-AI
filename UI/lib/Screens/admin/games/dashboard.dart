@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/Screens/admin/games/widgets/game_listview.dart';
 import 'package:garbageClassification/Screens/admin/games/widgets/grid_dashboard.dart';
+import 'package:garbageClassification/Screens/admin/games/widgets/menu_bar.dart';
 import 'package:garbageClassification/common/util/game_dialogs.dart';
 import 'package:garbageClassification/controllers/gameController.dart';
 
@@ -55,6 +56,9 @@ class _AdminGameScreenState extends State<AdminGameScreen> {
             ),
           ],
         ),
+        actions: [
+          MenuBarCustom(),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: gameController.streamGetGameList(

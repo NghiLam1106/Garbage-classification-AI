@@ -37,14 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isChatIcon = false;
   bool isScanButtonEnabled = false;
   bool isPaymentInitiated = false;
-void initState() {
-    super.initState();
-    _checkPlanUnlocked();
-  }
-
-    @override
+  @override
   void initState() {
     super.initState();
+    _checkPlanUnlocked();
     _check();
   }
 
@@ -302,11 +298,11 @@ void initState() {
     if (isScanButtonEnabled)
       return const SizedBox(); // Đã mở khóa → không hiển thị
 
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Center(
         child: Padding(
-padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -323,7 +319,8 @@ padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20), // Tăng padding
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 25, vertical: 20), // Tăng padding
                   elevation: 2,
                 ),
                 onPressed: () {
@@ -347,7 +344,7 @@ padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       ),
     );
   }
-  
+
   Future<void> _updateProfile() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -357,36 +354,33 @@ padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
           .update({'payment': "1"});
     }
   }
+
   Future<void> _listmoney() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await FirebaseFirestore.instance
-          .collection('totalmoney')
-          .add({
+      await FirebaseFirestore.instance.collection('totalmoney').add({
         'uid': user.uid,
         'money': 30000,
         'createdAt': DateTime.now(),
-          });
+      });
     }
   }
+
   Future<void> _checkPlanUnlocked() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      final doc =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(user.uid)
-              .get();
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
 
       final data = doc.data();
       print("Datacc: $data");
       if (data != null && data['payment'] == "1") {
         print("check");
         setState(() => isScanButtonEnabled = true);
-      }
-      else {
-
+      } else {
         print("No pay");
         setState(() => isScanButtonEnabled = false);
       }

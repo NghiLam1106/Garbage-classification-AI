@@ -15,6 +15,7 @@ import 'package:garbageClassification/Screens/GuideScreen/GuideScreen.dart';
 import 'package:garbageClassification/Screens/HomeScreen/widget/buildBtn.dart';
 import 'package:garbageClassification/Screens/Payment/payment_config.dart';
 import 'package:garbageClassification/Screens/ProfileScreen/profileScreens.dart';
+import 'package:garbageClassification/auth/auth.dart';
 import 'package:garbageClassification/router/app_router.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -39,6 +40,24 @@ class _HomeScreenState extends State<HomeScreen> {
 void initState() {
     super.initState();
     _checkPlanUnlocked();
+  }
+
+    @override
+  void initState() {
+    super.initState();
+    _check();
+  }
+
+  void _check() async {
+    final auth = AuthController();
+    final user = await auth.getUserData();
+
+    if (user != null && user.role == 'admin') {
+      Navigator.pushReplacementNamed(
+        context,
+        AppRouter.admin,
+      );
+    }
   }
 
   Future<void> _pickImage() async {
@@ -138,7 +157,7 @@ void initState() {
       body = Stack(
         children: [
           Positioned.fill(
-            child: Image.asset('images/bg13.png', fit: BoxFit.cover),
+            child: Image.asset('assets/bg13.png', fit: BoxFit.cover),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,

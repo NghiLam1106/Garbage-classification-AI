@@ -227,7 +227,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       shadowColor: Colors.grey,
                     ),
                     child: CircularImages(
-                      image: "assets/images/google.png",
+                      image: "assets/google.png",
                       width: 50,
                       height: 50,
                     ),

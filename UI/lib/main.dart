@@ -1,9 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/firebase_options.dart';
-import 'router/app_router.dart';
 
+import 'router/app_router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

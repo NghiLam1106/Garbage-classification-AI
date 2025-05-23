@@ -122,7 +122,7 @@ class ProfileScreen extends StatelessWidget {
             child: user == null
                 ? ElevatedButton.icon(
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, AppRouter.login);
+                      Navigator.pushNamed(context, AppRouter.login);
                     },
                     icon: const Icon(Icons.login),
                     label: const Text("Đăng nhập"),

@@ -45,18 +45,9 @@ class GuideScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacementNamed(context, AppRouter.home);
+            Navigator.pushNamed(context, AppRouter.home);
           },
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              // Xử lý khi nhấn nút thêm
-              print('Thêm hướng dẫn mới');
-            },
-          ),
-        ],
       ),
       body: ListView.builder(
         itemCount: guides.length,

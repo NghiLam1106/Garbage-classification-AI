@@ -154,7 +154,7 @@ class LoginScreenState extends State<LoginScreen> {
                   TextButton(
                     onPressed: () {
                       // Chuyển hướng đến trang đăng ký
-                       Navigator.pushReplacementNamed(
+                       Navigator.pushNamed(
                               context,
                               AppRouter.register,
                             );

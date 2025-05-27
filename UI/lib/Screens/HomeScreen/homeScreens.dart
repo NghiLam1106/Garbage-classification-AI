@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _analyzeImage(File imageFile) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.6:5000/predict'),
+      Uri.parse('http://localhost:5000/predict'),
     );
 
     request.files.add(
@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
       paymentItems: const [
         PaymentItem(
           label: 'Mở khóa tính năng nhận diện rác',
-          amount: '30000',
+          amount: '30',
           status: PaymentItemStatus.final_price,
         ),
       ],
@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
       paymentItems: const [
         PaymentItem(
           label: 'Mở khóa tính năng nhận diện rác',
-          amount: '30000',
+          amount: '30',
           status: PaymentItemStatus.final_price,
         ),
       ],
@@ -283,9 +283,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Text(
                 "Chức năng quét rác đang bị khóa 🔒",
-                style: TextStyle(
-                    color: Color.fromARGB(253, 250, 0, 0), fontSize: 18),
-                textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Color.fromARGB(253, 250, 0, 0),
+      fontSize: 18,
+      fontWeight: FontWeight.bold, // In đậm chữ
+            )
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -341,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user != null) {
       await FirebaseFirestore.instance.collection('totalmoney').add({
         'uid': user.uid,
-        'money': 30000,
+        'money': 30,
         'createdAt': DateTime.now(),
       });
     }

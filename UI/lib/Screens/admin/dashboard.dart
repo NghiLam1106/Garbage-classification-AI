@@ -20,14 +20,14 @@ class AdminGameScreen extends StatefulWidget {
 class _AdminGameScreenState extends State<AdminGameScreen> {
   final GameController gameController = GameController();
   final TotalMoneyController totalMoneyController = TotalMoneyController();
-  final UserController userController = UserController();  
+  final UserController userController = UserController();
   final TextEditingController searchController = TextEditingController();
 
   bool isPriceDescending = true;
   String searchQuery = '';
   final List<UserModel> vipUsers = [];
   final List<UserModel> normalUsers = [];
-  late int totalMoney;
+  late int totalMoney = 0;
 
   @override
   void initState() {
@@ -35,7 +35,7 @@ class _AdminGameScreenState extends State<AdminGameScreen> {
     super.initState();
     getVipUsers();
     getNormalUsers();
-    getTotalMoney(); 
+    getTotalMoney();
   }
 
   Future<void> getVipUsers() async {
@@ -89,7 +89,7 @@ class _AdminGameScreenState extends State<AdminGameScreen> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    searchQuery = value; 
+                    searchQuery = value;
                   });
                 },
               ),

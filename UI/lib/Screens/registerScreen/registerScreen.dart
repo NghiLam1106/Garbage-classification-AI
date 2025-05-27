@@ -32,9 +32,9 @@ class RegisterScreenState extends State<RegisterScreen> {
       final String password = passwordController.text.trim();
 
       final authController = AuthController();
-        await authController.signUp(
-            context, fullnameController.text, email, password);
-      }
+      await authController.signUp(
+          context, fullnameController.text, email, password);
+    }
   }
 
   @override
@@ -169,7 +169,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 135, vertical: 20),
                   textStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 15, fontWeight: FontWeight.bold),
                 ),
                 child: const Text('Đăng ký'),
               ),
@@ -185,11 +185,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                       Navigator.pushNamed(
-                              context,
-                              AppRouter.login,
-                            );
-                          },
+                      Navigator.pushNamed(
+                        context,
+                        AppRouter.login,
+                      );
+                    },
                     child: const Text(
                       'Đăng nhập',
                       style: TextStyle(

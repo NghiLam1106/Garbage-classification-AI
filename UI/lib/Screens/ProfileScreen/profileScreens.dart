@@ -66,28 +66,31 @@ class ProfileScreen extends StatelessWidget {
           style: const TextStyle(fontSize: 16, color: Colors.white70),
         ),
         const SizedBox(height: 12),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: isVip ? Colors.amber : Colors.grey,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            isVip ? 'Tài khoản VIP' : 'Tài khoản Thường',
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        // Container(
+        //   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        //   decoration: BoxDecoration(
+        //     color: isVip ? Colors.amber : Colors.grey,
+        //     borderRadius: BorderRadius.circular(20),
+        //   ),
+        //   child: Text(
+        //     isVip ? 'Tài khoản VIP' : 'Tài khoản Thường',
+        //     style: const TextStyle(
+        //       color: Colors.black,
+        //       fontWeight: FontWeight.bold,
+        //     ),
+        //   ),
+        // ),
         const SizedBox(height: 24),
         ElevatedButton.icon(
           onPressed: () {
             final authController = AuthController();
             authController.signOut(context);
           },
-          icon: const Icon(Icons.logout),
-          label: const Text("Đăng xuất"),
+          icon: const Icon(Icons.logout, color: Colors.white),
+          label: const Text(
+            "Đăng xuất",
+            style: TextStyle(color: Colors.white),
+          ),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.redAccent,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -103,7 +106,7 @@ class ProfileScreen extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title:
-            const Text('Trang cá nhân', style: TextStyle(color: Colors.white)),
+            const Text('Trang cá nhân', style: TextStyle(color: Colors.black)),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -124,8 +127,9 @@ class ProfileScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.pushNamed(context, AppRouter.login);
                     },
-                    icon: const Icon(Icons.login),
-                    label: const Text("Đăng nhập"),
+                    icon: const Icon(Icons.login, color: Colors.white),
+                    label: const Text("Đăng nhập",
+                        style: TextStyle(color: Colors.white)),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       padding: const EdgeInsets.symmetric(

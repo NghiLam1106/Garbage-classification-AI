@@ -319,7 +319,7 @@ class _QuizScreenState extends State<QuizScreen> {
                     Text(
                       '${_controller.score}/${_controller.quantity}',
                       style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                         color: Colors.green.shade800,
                       ),

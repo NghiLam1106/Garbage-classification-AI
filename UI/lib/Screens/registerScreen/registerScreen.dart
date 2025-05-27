@@ -52,7 +52,7 @@ class RegisterScreenState extends State<RegisterScreen> {
               const Text(
                 'Đăng ký',
                 style: TextStyle(
-                  fontSize: 35,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -139,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Phân rác đúng cách – Bé nhỏ làm điều to!',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -173,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(
                 _result.isNotEmpty ? _result : 'Kết quả sẽ hiển thị ở đây',
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),

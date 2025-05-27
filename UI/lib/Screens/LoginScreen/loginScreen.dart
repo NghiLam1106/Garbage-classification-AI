@@ -51,7 +51,7 @@ class LoginScreenState extends State<LoginScreen> {
               const Text(
                 'Đăng nhập',
                 style: TextStyle(
-                  fontSize: 35,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),

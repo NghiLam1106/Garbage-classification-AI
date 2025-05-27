@@ -67,7 +67,7 @@ class GridDashboard extends StatelessWidget {
         crossAxisCount: 2,
         mainAxisSpacing: AppSizes.spaceBtwItems,
         crossAxisSpacing: AppSizes.spaceBtwItems,
-        mainAxisExtent: 130,
+        mainAxisExtent: 160,
       ),
       itemBuilder: (_, index) {
         final item = _dashboardItems[index];

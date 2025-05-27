@@ -220,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
       paymentItems: const [
         PaymentItem(
           label: 'Mở khóa tính năng nhận diện rác',
-          amount: '30000',
+          amount: '30',
           status: PaymentItemStatus.final_price,
         ),
       ],
@@ -246,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> {
       paymentItems: const [
         PaymentItem(
           label: 'Mở khóa tính năng nhận diện rác',
-          amount: '30000',
+          amount: '30',
           status: PaymentItemStatus.final_price,
         ),
       ],
@@ -283,9 +283,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Text(
                 "Chức năng quét rác đang bị khóa 🔒",
-                style: TextStyle(
-                    color: Color.fromARGB(253, 250, 0, 0), fontSize: 18),
-                textAlign: TextAlign.center,
+            style: TextStyle(
+                color: Color.fromARGB(253, 250, 0, 0),
+      fontSize: 18,
+      fontWeight: FontWeight.bold, // In đậm chữ
+            )
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -312,7 +314,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               if (isPaymentInitiated == false)
-                Platform.isIOS ? _buildApplePay() : _buildGooglePay(),
+                if (!kIsWeb)
+                  Platform.isIOS ? _buildApplePay() : _buildGooglePay()
+                else
+                  const Text(
+                    "Thanh toán chưa hỗ trợ trên nền web.",
+                    style: TextStyle(color: Colors.white),
+                  ),
             ],
           ),
         ),
@@ -335,7 +343,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (user != null) {
       await FirebaseFirestore.instance.collection('totalmoney').add({
         'uid': user.uid,
-        'money': 30000,
+        'money': 30,
         'createdAt': DateTime.now(),
       });
     }

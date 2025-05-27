@@ -312,7 +312,13 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 20),
               if (isPaymentInitiated == false)
-                Platform.isIOS ? _buildApplePay() : _buildGooglePay(),
+                if (!kIsWeb)
+                  Platform.isIOS ? _buildApplePay() : _buildGooglePay()
+                else
+                  const Text(
+                    "Thanh toán chưa hỗ trợ trên nền web.",
+                    style: TextStyle(color: Colors.white),
+                  ),
             ],
           ),
         ),

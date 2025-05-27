@@ -80,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _analyzeImage(File imageFile) async {
     var request = http.MultipartRequest(
       'POST',
-      Uri.parse('http://192.168.1.6:5000/predict'),
+      Uri.parse('http://192.168.1.2:5000/predict'),
     );
 
     request.files.add(

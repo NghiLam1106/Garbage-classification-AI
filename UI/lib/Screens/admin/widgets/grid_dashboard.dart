@@ -18,7 +18,7 @@ class GridDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<_DashboardItem> _dashboardItems = [
+    final List<_DashboardItem> dashboardItems = [
       _DashboardItem(
           icon: Icons.shopping_cart,
           label: 'Doanh thu',
@@ -60,17 +60,17 @@ class GridDashboard extends StatelessWidget {
           route: () {}),
     ];
     return GridView.builder(
-      itemCount: _dashboardItems.length,
+      itemCount: dashboardItems.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: AppSizes.spaceBtwItems,
         crossAxisSpacing: AppSizes.spaceBtwItems,
-        mainAxisExtent: 160,
+        mainAxisExtent: 180,
       ),
       itemBuilder: (_, index) {
-        final item = _dashboardItems[index];
+        final item = dashboardItems[index];
         return GestureDetector(
           onTap: item.route,
           child: RoundedContainer(

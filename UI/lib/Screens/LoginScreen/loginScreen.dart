@@ -31,7 +31,7 @@ class LoginScreenState extends State<LoginScreen> {
       final String email = emailController.text.trim();
       final String password = passwordController.text.trim();
 
-     final authController = AuthController();
+      final authController = AuthController();
       await authController.signIn(context, email, password);
     }
   }
@@ -136,7 +136,7 @@ class LoginScreenState extends State<LoginScreen> {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 125, vertical: 20),
                   textStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                      fontSize: 14, fontWeight: FontWeight.bold),
                 ),
                 child: const Text('Đăng nhập'),
               ),
@@ -154,11 +154,11 @@ class LoginScreenState extends State<LoginScreen> {
                   TextButton(
                     onPressed: () {
                       // Chuyển hướng đến trang đăng ký
-                       Navigator.pushNamed(
-                              context,
-                              AppRouter.register,
-                            );
-                      },
+                      Navigator.pushNamed(
+                        context,
+                        AppRouter.register,
+                      );
+                    },
                     child: const Text(
                       'Đăng ký',
                       style: TextStyle(

@@ -252,6 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       type: GooglePayButtonType.pay,
       margin: const EdgeInsets.only(top: 15.0),
+      width: 350,
       onPaymentResult: (result) {
         if (result['paymentMethodData'] != null) {
           _updateProfile();
@@ -281,14 +282,12 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                "Chức năng quét rác đang bị khóa 🔒",
-            style: TextStyle(
-                color: Color.fromARGB(253, 250, 0, 0),
-      fontSize: 18,
-      fontWeight: FontWeight.bold, // In đậm chữ
-            )
-              ),
+              const Text("Chức năng quét rác đang bị khóa 🔒",
+                  style: TextStyle(
+                    color: Color.fromARGB(253, 250, 0, 0),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold, // In đậm chữ
+                  )),
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(

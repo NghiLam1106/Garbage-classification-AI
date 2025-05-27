@@ -185,7 +185,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                       Navigator.pushReplacementNamed(
+                       Navigator.pushNamed(
                               context,
                               AppRouter.login,
                             );

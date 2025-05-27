@@ -1,54 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:garbageClassification/common/constants/appSizes.dart';
+import 'package:garbageClassification/router/app_router.dart';
 import 'package:garbageClassification/widgets/rounded_container.dart';
 
 class GridDashboard extends StatelessWidget {
-  const GridDashboard({
-    super.key,
-    required this.orderQuantity,
-    required this.productQuantity,
-    required this.brandQuantity,
-    required this.categoriesQuantity
-  });
+  const GridDashboard(
+      {super.key,
+      required this.revenueQuantity,
+      required this.gameQuantity,
+      required this.vipUserQuantity,
+      required this.userQuantity});
 
-  final int orderQuantity;
-  final int productQuantity;
-  final int brandQuantity;
-  final int categoriesQuantity;
+  final int revenueQuantity;
+  final int gameQuantity;
+  final int vipUserQuantity;
+  final int userQuantity;
 
   @override
   Widget build(BuildContext context) {
     final List<_DashboardItem> _dashboardItems = [
       _DashboardItem(
-        icon: Icons.shopping_cart,
-        label: 'Doanh thu',
-        count: orderQuantity.toString(),
-        color: Colors.blueAccent,
-      ),
+          icon: Icons.shopping_cart,
+          label: 'Doanh thu',
+          count: '${revenueQuantity.toString()} \$',
+          color: Colors.blueAccent,
+          route: () {
+            Navigator.pushNamed(
+              context,
+              AppRouter.revenue,
+            );
+          }),
       _DashboardItem(
-        icon: Icons.supervised_user_circle_outlined,
-        label: 'Người dùng',
-        count: categoriesQuantity.toString(),
-        color: Colors.orangeAccent,
-      ),
+          icon: Icons.supervised_user_circle_outlined,
+          label: 'Người dùng thường',
+          count: userQuantity.toString(),
+          color: Colors.orangeAccent,
+          route: () {
+            Navigator.pushNamed(
+              context,
+              AppRouter.userNormal,
+            );
+          }),
       _DashboardItem(
-        icon: Icons.verified_sharp,
-        label: 'Người dùng VIP',
-        count: brandQuantity.toString(),
-        color: Colors.green,
-      ),
+          icon: Icons.verified_sharp,
+          label: 'Người dùng VIP',
+          count: vipUserQuantity.toString(),
+          color: Colors.green,
+          route: () {
+            Navigator.pushNamed(
+              context,
+              AppRouter.userVip,
+            );
+          }),
       _DashboardItem(
-        icon: Icons.games,
-        label: 'Trò chơi',
-        count: productQuantity.toString(),
-        color: Colors.deepPurple,
-      ),
+          icon: Icons.games,
+          label: 'Trò chơi',
+          count: gameQuantity.toString(),
+          color: Colors.deepPurple,
+          route: () {}),
     ];
     return GridView.builder(
       itemCount: _dashboardItems.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         mainAxisSpacing: AppSizes.spaceBtwItems,
         crossAxisSpacing: AppSizes.spaceBtwItems,
@@ -57,7 +72,7 @@ class GridDashboard extends StatelessWidget {
       itemBuilder: (_, index) {
         final item = _dashboardItems[index];
         return GestureDetector(
-          onTap: (){},
+          onTap: item.route,
           child: RoundedContainer(
             backgroundColor: item.color.withOpacity(0.1),
             showBorder: false,
@@ -88,11 +103,13 @@ class _DashboardItem {
   final String label;
   final String count;
   final Color color;
+  final VoidCallback route; // Nullable
 
   _DashboardItem({
     required this.icon,
     required this.label,
     required this.count,
     required this.color,
+    required this.route, // Optional
   });
 }

@@ -106,7 +106,7 @@ class _UpdateGameScreenState extends State<UpdateGameScreen> {
                   SnackBar(content: Text('Cập nhật thành công')),
                 );
 
-                Navigator.pushReplacementNamed(
+                Navigator.pushNamed(
                   context,
                   AppRouter.admin,
                 );

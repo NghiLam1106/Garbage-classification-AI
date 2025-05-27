@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:garbageClassification/Screens/admin/games/widgets/game_card.dart';
+import 'package:garbageClassification/Screens/admin/widgets/game_card.dart';
 import 'package:garbageClassification/common/util/dialog_utils.dart';
 import 'package:garbageClassification/controllers/gameController.dart';
 import 'package:garbageClassification/router/app_router.dart';
@@ -38,7 +38,7 @@ class ListviewGame extends StatelessWidget {
                     },
                   ),
               onEdit: () => {
-                    Navigator.pushReplacementNamed(
+                    Navigator.pushNamed(
                       context,
                       AppRouter.updateGame,
                       arguments: doc.id,

@@ -87,7 +87,7 @@ class _GameScreenState extends State<GameScreen> {
                       final game = filteredGames[index];
                       return GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(
+                          Navigator.pushNamed(
                             context,
                             AppRouter.quiz,
                             arguments: game.id,

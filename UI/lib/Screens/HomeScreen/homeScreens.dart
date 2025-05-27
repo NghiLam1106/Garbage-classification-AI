@@ -77,31 +77,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void handleMessage() {
-    // ignore: avoid_print
-    print("Mở tin nhắn...");
-  }
-
-  /* Future<void> _handlePayment() async {
-    final payUrl = await MomoService.createMomoPayment("1000");
-
-    if (payUrl != null) {
-      if (await canLaunchUrl(Uri.parse(payUrl))) {
-        await launchUrl(
-          Uri.parse(payUrl),
-          mode: LaunchMode.externalApplication,
-        );
-      } else {
-        // ignore: avoid_print
-        print("Không thể mở URL: $payUrl");
-      }
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Không thể tạo thanh toán")));
-    }
-  }*/
-
   Future<void> _analyzeImage(File imageFile) async {
     var request = http.MultipartRequest(
       'POST',

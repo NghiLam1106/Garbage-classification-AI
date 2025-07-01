@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:garbageClassification/Screens/GameScreen/widgets/Answer.dart';
+import 'package:garbageClassification/Screens/GameScreen/widgets/NextButton.dart';
+import 'package:garbageClassification/Screens/GameScreen/widgets/Question.dart';
+import 'package:garbageClassification/Screens/GameScreen/widgets/QuizExplanation.dart';
+import 'package:garbageClassification/Screens/GameScreen/widgets/ResultDialog.dart';
 import 'package:garbageClassification/controllers/gameController.dart';
 import 'package:garbageClassification/controllers/quizController.dart';
 import 'package:garbageClassification/model/quiz_model.dart';
@@ -92,158 +97,27 @@ class _QuizScreenState extends State<QuizScreen> {
           child: Column(
             children: [
               // Câu hỏi
-              Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    currentQuiz.question,
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green.shade900,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+              Question(question: currentQuiz.question),
               SizedBox(height: 24),
 
               // Đáp án
-              Expanded(
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: currentQuiz.answers.length,
-                  itemBuilder: (context, index) {
-                    final answer = currentQuiz.answers[index];
-                    final isCorrect =
-                        _isAnswered && index == currentQuiz.correctAnswerIndex;
-                    final isSelected = _selectedAnswerIndex == index;
-
-                    Color? cardColor;
-                    if (_isAnswered) {
-                      cardColor = isCorrect
-                          ? Colors.green.shade100
-                          : (isSelected ? Colors.red.shade100 : null);
-                    }
-
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Card(
-                        elevation: 2,
-                        color: cardColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          side: BorderSide(
-                            color: isSelected
-                                ? Colors.green.shade700
-                                : Colors.grey.shade300,
-                            width: isSelected ? 2 : 1,
-                          ),
-                        ),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(12),
-                          onTap: () => _handleAnswerSelection(index),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Row(
-                              children: [
-                                if (_isAnswered)
-                                  Icon(
-                                    isCorrect
-                                        ? Icons.check_circle
-                                        : Icons.cancel,
-                                    color:
-                                        isCorrect ? Colors.green : Colors.red,
-                                  ),
-                                SizedBox(width: 12),
-                                Expanded(
-                                  child: Text(
-                                    answer,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: _isAnswered
-                                          ? (isCorrect
-                                              ? Colors.green.shade900
-                                              : (isSelected
-                                                  ? Colors.red.shade900
-                                                  : Colors.black))
-                                          : Colors.black,
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+              Answer(
+                currentQuiz: currentQuiz,
+                isAnswered: _isAnswered,
+                selectedAnswerIndex: _selectedAnswerIndex,
+                handleAnswerSelection: _handleAnswerSelection,
               ),
 
               // Giải thích khi đã trả lời
               if (_isAnswered)
-                AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  margin: EdgeInsets.only(top: 16),
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.shade50,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '💡 Giải thích:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue.shade900,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        currentQuiz.explanation,
-                        style: TextStyle(fontSize: 14),
-                      ),
-                    ],
-                  ),
-                ),
+                QuizExplanation(explanation: currentQuiz.explanation),
 
               // Nút tiếp tục
               if (_isAnswered)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 8.0),
-                  child: ElevatedButton(
-                    onPressed: _handleNextQuestion,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green.shade700,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 4,
-                    ),
-                    child: Text(
-                      _controller.currentQuestionNumber < _controller.quantity
-                          ? 'TIẾP THEO'
-                          : 'XEM KẾT QUẢ',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                Nextbutton(
+                  handleNextQuestion: _handleNextQuestion,
+                  isEnd:
+                      _controller.currentQuestionNumber < _controller.quantity,
                 ),
             ],
           ),
@@ -252,6 +126,7 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
+  // Xử lý sự kiện khi người dùng chọn đáp án
   void _handleAnswerSelection(int index) {
     if (!_isAnswered) {
       setState(() {
@@ -273,6 +148,7 @@ class _QuizScreenState extends State<QuizScreen> {
     }
   }
 
+
   void _handleNextQuestion() {
     setState(() {
       _isAnswered = false;
@@ -282,109 +158,27 @@ class _QuizScreenState extends State<QuizScreen> {
       }
     });
   }
+  // Xử lý sự kiện khi người dùng nhấn nút "Chơi lại"
+  void _handleReset() {
+    Navigator.pop(context);
+    _controller.reset();
+    setState(() {});
+  }
 
+  // Hiển thị hộp thoại kết quả khi người dùng hoàn thành tất cả câu hỏi
   void _showResultDialog() {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        title: Center(
-          child: Text(
-            'HOÀN THÀNH!',
-            style: TextStyle(
-              color: Colors.green.shade700,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(height: 20),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 150,
-                  height: 150,
-                  child: CircularProgressIndicator(
-                    value: _controller.score / _controller.quantity,
-                    strokeWidth: 10,
-                    color: Colors.green,
-                    backgroundColor: Colors.grey.shade200,
-                  ),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      '${_controller.score}/${_controller.quantity}',
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green.shade800,
-                      ),
-                    ),
-                    Text(
-                      'câu đúng',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Text(
-              _getResultMessage(),
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade700,
-              ),
-            ),
-            SizedBox(height: 20),
-          ],
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  _controller.reset();
-                  setState(() {});
-                },
-                child: Text(
-                  'CHƠI LẠI',
-                  style: TextStyle(
-                    color: Colors.green.shade700,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, AppRouter.home);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green.shade700,
-                ),
-                child: Text(
-                  'TRANG CHỦ',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-              ),
-            ],
-          ),
-        ],
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+      builder: (context) => Resultdialog(
+        resultMessage: _getResultMessage(),
+        score: _controller.score,
+        quantity: _controller.quantity,
+        resetGame: _handleReset,
       ),
     );
   }
-
+  // Lấy thông điệp kết quả dựa trên điểm số
   String _getResultMessage() {
     final percentage = (_controller.score / _controller.quantity) * 100;
     if (percentage >= 90) return 'Xuất sắc! Bạn thực sự hiểu biết!';

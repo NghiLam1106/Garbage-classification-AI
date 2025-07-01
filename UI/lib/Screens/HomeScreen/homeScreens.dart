@@ -1,10 +1,8 @@
 // ignore_for_file: unused_import, file_names, use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:io';
 // ignore: unnecessary_import
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -12,8 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:garbageClassification/Screens/ChatBotScreen/chatScreen.dart';
 import 'package:garbageClassification/Screens/GameScreen/GameScreen.dart';
 import 'package:garbageClassification/Screens/GuideScreen/GuideScreen.dart';
+import 'package:garbageClassification/Screens/HomeScreen/widget/ApplePay.dart';
+import 'package:garbageClassification/Screens/HomeScreen/widget/GooglePay.dart';
 import 'package:garbageClassification/Screens/HomeScreen/widget/buildBtn.dart';
-import 'package:garbageClassification/Screens/Payment/payment_config.dart';
+import 'package:garbageClassification/common/util/Payment/payment_config.dart';
 import 'package:garbageClassification/Screens/ProfileScreen/profileScreens.dart';
 import 'package:garbageClassification/auth/auth.dart';
 import 'package:garbageClassification/router/app_router.dart';
@@ -40,8 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _checkPlanUnlocked();
+    _checkScanUnlocked();
     _check();
+  }
+
+  Future<void> handlePaymentResult(Map<String, dynamic> result) async {
+    setState(() => isScanButtonEnabled = true);
   }
 
   void _check() async {
@@ -146,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildPlanPageWithLock(),
+              _buildScanPageWithLock(),
               const SizedBox(height: 20),
               buildButton(
                 'Quét rác thải',
@@ -212,65 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildApplePay() {
-    return ApplePayButton(
-      paymentConfiguration: PaymentConfiguration.fromJsonString(
-        defaultApplePay,
-      ),
-      paymentItems: const [
-        PaymentItem(
-          label: 'Mở khóa tính năng nhận diện rác',
-          amount: '30',
-          status: PaymentItemStatus.final_price,
-        ),
-      ],
-      style: ApplePayButtonStyle.black,
-      width: 250,
-      height: 50,
-      type: ApplePayButtonType.buy,
-      margin: const EdgeInsets.only(top: 15.0),
-      onPaymentResult: (result) {
-        debugPrint('ApplePay Success: $result');
-        setState(() => isScanButtonEnabled = true);
-      },
-      loadingIndicator: const Center(child: CircularProgressIndicator()),
-    );
-  }
-
-  Widget _buildGooglePay() {
-    print("Đang xử lý thanh toán Google Pay...");
-    return GooglePayButton(
-      paymentConfiguration: PaymentConfiguration.fromJsonString(
-        defaultGooglePay,
-      ),
-      paymentItems: const [
-        PaymentItem(
-          label: 'Mở khóa tính năng nhận diện rác',
-          amount: '30',
-          status: PaymentItemStatus.final_price,
-        ),
-      ],
-      type: GooglePayButtonType.pay,
-      margin: const EdgeInsets.only(top: 15.0),
-      width: 350,
-      onPaymentResult: (result) {
-        if (result['paymentMethodData'] != null) {
-          _updateProfile();
-          _listmoney();
-          setState(() => isScanButtonEnabled = true);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Thanh Toán Thành Công.'),
-            ),
-          );
-          debugPrint('GooglePay Success: $result');
-        }
-      },
-      loadingIndicator: const Center(child: CircularProgressIndicator()),
-    );
-  }
-
-  Widget _buildPlanPageWithLock() {
+  Widget _buildScanPageWithLock() {
     if (isScanButtonEnabled)
       return const SizedBox(); // Đã mở khóa → không hiển thị
 
@@ -314,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 20),
               if (isPaymentInitiated == false)
                 if (!kIsWeb)
-                  Platform.isIOS ? _buildApplePay() : _buildGooglePay()
+                  Platform.isIOS ? Applepay(handlePaymentResult: handlePaymentResult) : Googlepay()
                 else
                   const Text(
                     "Thanh toán chưa hỗ trợ trên nền web.",
@@ -327,28 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _updateProfile() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(user.uid)
-          .update({'payment': "1"});
-    }
-  }
-
-  Future<void> _listmoney() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      await FirebaseFirestore.instance.collection('totalmoney').add({
-        'uid': user.uid,
-        'money': 30,
-        'createdAt': DateTime.now(),
-      });
-    }
-  }
-
-  Future<void> _checkPlanUnlocked() async {
+  Future<void> _checkScanUnlocked() async {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
